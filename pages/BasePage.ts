@@ -9,7 +9,6 @@ export class BasePage {
 
     // accept the cookies
     async acceptCookies() {
-
         const acceptCookieButton = this.page.locator('button.js-accept-all-cookies');
         
         if (await acceptCookieButton.isVisible()) {
@@ -19,7 +18,6 @@ export class BasePage {
 
     // reject the cookies 
     async rejectCookies() {
-        
         const rejectCookiesButton = this.page.locator('button.js-deny-cookies');
         
         if (await rejectCookiesButton.isVisible()) {
