@@ -17,17 +17,6 @@ export class CableGuyPage extends BasePage {
         await this.page.locator('.cg-plugButton--right').click();
     }
 
-    // async getVisibleModal() {
-    //     const modals = this.page.locator('.cg-plugmodal');
-    //     const count = await modals.count();
-    //     for (let i = 0; i < count; i++) {
-    //         if (await modals.nth(i).isVisible()) {
-    //             return modals.nth(i);
-    //         }
-    //     }
-    //     throw new Error('No visible modal found');
-    // }
-
     async getVisibleModal() {
         const modal = this.page.locator('.cg-plugmodal');
         if (await modal.isVisible()) {
@@ -58,7 +47,8 @@ export class CableGuyPage extends BasePage {
     async waitForCableListStableInModal(modal, timeout = 5000) {
         const cableLocators = modal.locator('.cg-plugItem');
         let lastCount = -1;
-        for (let i = 0; i < 10; i++) {
+        let maxCount = 10;
+        for (let i = 0; i < maxCount; i++) {
             const count = await cableLocators.count();
             if (count === lastCount) {
                 await this.page.waitForTimeout(500);
@@ -98,7 +88,8 @@ export class CableGuyPage extends BasePage {
        
         // Wait for manufacturer count to stabilize (no change for 500ms)
         let lastCount = -1;
-        for (let i = 0; i < 10; i++) {
+        let maxCount = 10;
+        for (let i = 0; i < maxCount; i++) {
             const count = await this.page.locator('.cg-brands__item').count();
             if (count === lastCount) {
                 await this.page.waitForTimeout(500);
@@ -159,7 +150,8 @@ export class CableGuyPage extends BasePage {
     async waitForProductListStable(timeout = 5000) {
         await this.page.waitForSelector('#cg-results .fx-product-list-entry', { state: 'visible', timeout });
         let lastCount = -1;
-        for (let i = 0; i < 10; i++) {
+        let maxCount = 10;
+        for (let i = 0; i < maxCount; i++) {
             const count = await this.page.locator('#cg-results .fx-product-list-entry').count();
             if (count === lastCount) {
                 await this.page.waitForTimeout(500);
@@ -173,7 +165,6 @@ export class CableGuyPage extends BasePage {
 
     // Validate that the number of products displayed matches the expected count
     async validateProductsBelongToManufacturer(manufacturerName: string) {
-        // await this.waitForProductListStable();
         await this.waitForProductCountUpdate(manufacturerName);
         // Get all visible product entries
         const products = this.page.locator('#cg-results .fx-product-list-entry');
