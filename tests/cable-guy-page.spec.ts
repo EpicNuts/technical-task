@@ -22,12 +22,11 @@ test.describe("Testing the CableGuy, Thomann's cable selection manager", () => {
 
     
     // Step 2: End cable
-    const apiPromise = page.waitForResponse(resp => resp.url().includes('cableguy_ajax.html') && resp.status() === 200);
-    await cableGuyPage.clickCableEnd();
     await Promise.all([
-      page.waitForSelector('.cg-plugmodal', { state: 'visible', timeout: 5000 }),
-      apiPromise
+      cableGuyPage.clickCableEnd(),
+      page.waitForResponse(resp => resp.url().includes('cableguy_ajax.html') && resp.status() === 200)
     ]);
+    await page.waitForSelector('.cg-plugmodal', { state: 'visible', timeout: 5000 });
     const selectedTypeSecond = await cableGuyPage.selectRandomActiveCableTypeInModal();
     console.log(`[DEBUG] Selected cable type (end): ${selectedTypeSecond}`);   
     const selectedCableSecond = await cableGuyPage.selectRandomCableInModal();

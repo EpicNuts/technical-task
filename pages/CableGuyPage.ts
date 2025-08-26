@@ -17,13 +17,21 @@ export class CableGuyPage extends BasePage {
         await this.page.locator('.cg-plugButton--right').click();
     }
 
+    // async getVisibleModal() {
+    //     const modals = this.page.locator('.cg-plugmodal');
+    //     const count = await modals.count();
+    //     for (let i = 0; i < count; i++) {
+    //         if (await modals.nth(i).isVisible()) {
+    //             return modals.nth(i);
+    //         }
+    //     }
+    //     throw new Error('No visible modal found');
+    // }
+
     async getVisibleModal() {
-        const modals = this.page.locator('.cg-plugmodal');
-        const count = await modals.count();
-        for (let i = 0; i < count; i++) {
-            if (await modals.nth(i).isVisible()) {
-                return modals.nth(i);
-            }
+        const modal = this.page.locator('.cg-plugmodal');
+        if (await modal.isVisible()) {
+            return modal;
         }
         throw new Error('No visible modal found');
     }
@@ -32,14 +40,14 @@ export class CableGuyPage extends BasePage {
         const modal = await this.getVisibleModal();
         const cableTypeLocators = modal.locator('.cg-plugmodal__category__item:not(.inactive)');
         const count = await cableTypeLocators.count();
-        const enabledIndices: number[] = [];
+        const enabledCableTypes: number[] = [];
         for (let i = 0; i < count; i++) {
             if (await cableTypeLocators.nth(i).isEnabled()) {
-                enabledIndices.push(i);
+                enabledCableTypes.push(i);
             }
         }
-        if (enabledIndices.length === 0) throw new Error('No enabled cable types available');
-        const randomIndex = enabledIndices[Math.floor(Math.random() * enabledIndices.length)];
+        if (enabledCableTypes.length === 0) throw new Error('No enabled cable types available');
+        const randomIndex = enabledCableTypes[Math.floor(Math.random() * enabledCableTypes.length)];
         const selectedType = await cableTypeLocators.nth(randomIndex).textContent();
         await cableTypeLocators.nth(randomIndex).click();
         // Wait for cable list to update and stabilize after selecting cable type
