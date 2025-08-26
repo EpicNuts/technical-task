@@ -11,7 +11,7 @@ export class BasePage {
         const acceptCookieButton = this.page.locator('button.js-accept-all-cookies');
         
         if (await acceptCookieButton.isVisible()) {
-            await acceptCookieButton.click()
+            await acceptCookieButton.click();
         }
     }
 
