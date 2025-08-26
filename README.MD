@@ -41,8 +41,9 @@ All test logic is modularized in the `pages/CableGuyPage.ts` page object for mai
 
 ## Folder Structure
 
-- `tests/` - Playwright test files
 - `pages/` - Page objects and helpers
+- `tests/` - Playwright test files
+- `playwright-report/` - Playwright test reports
 - `playwright.config.ts` - Playwright configuration
 
 ## Useful Commands
