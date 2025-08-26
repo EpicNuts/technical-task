@@ -17,7 +17,7 @@ npx playwright install
 ## Running Tests
 
 ```bash
-npx playwright test
+npm run test
 ```
 
 ## Running Multiple Test Iterations

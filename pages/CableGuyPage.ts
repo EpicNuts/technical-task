@@ -44,10 +44,10 @@ export class CableGuyPage extends BasePage {
         return selectedType;
     }
 
-    async waitForCableListStableInModal(modal, timeout = 5000) {
+    async waitForCableListStableInModal(modal) {
         const cableLocators = modal.locator('.cg-plugItem');
         let lastCount = -1;
-        let maxCount = 10;
+        const maxCount = 10;
         for (let i = 0; i < maxCount; i++) {
             const count = await cableLocators.count();
             if (count === lastCount) {
@@ -88,7 +88,7 @@ export class CableGuyPage extends BasePage {
        
         // Wait for manufacturer count to stabilize (no change for 500ms)
         let lastCount = -1;
-        let maxCount = 10;
+        const maxCount = 10;
         for (let i = 0; i < maxCount; i++) {
             const count = await this.page.locator('.cg-brands__item').count();
             if (count === lastCount) {
@@ -130,7 +130,7 @@ export class CableGuyPage extends BasePage {
         const manufacturer = manufacturerItems.nth(selected.index);
         await manufacturer.click();
         console.log(`[DEBUG] Selected manufacturer: ${selected.name}, expected product count: ${selected.count}`);
-        return { manufacturer, manufacturerName: selected.name, expectedCount: selected.count };
+        return { manufacturerName: selected.name, expectedCount: selected.count };
     }
 
     // Wait for product count to update after manufacturer selection
@@ -150,7 +150,7 @@ export class CableGuyPage extends BasePage {
     async waitForProductListStable(timeout = 5000) {
         await this.page.waitForSelector('#cg-results .fx-product-list-entry', { state: 'visible', timeout });
         let lastCount = -1;
-        let maxCount = 10;
+        const maxCount = 10;
         for (let i = 0; i < maxCount; i++) {
             const count = await this.page.locator('#cg-results .fx-product-list-entry').count();
             if (count === lastCount) {
@@ -166,7 +166,6 @@ export class CableGuyPage extends BasePage {
     // Validate that the number of products displayed matches the expected count
     async validateProductsBelongToManufacturer(manufacturerName: string) {
         await this.waitForProductCountUpdate(manufacturerName);
-        // Get all visible product entries
         const products = this.page.locator('#cg-results .fx-product-list-entry');
         const count = await products.count();
         let mismatch = 0;
@@ -175,7 +174,7 @@ export class CableGuyPage extends BasePage {
             if (!title.includes(manufacturerName)) mismatch++;
         }
         if (mismatch > 0) {
-            throw new Error(`Product manufacturer mismatch: expected all \"${manufacturerName}\", but found ${mismatch} mismatches.`);
+            throw new Error(`Product manufacturer mismatch: expected all "${manufacturerName}", but found ${mismatch} mismatches.`);
         }
         console.log(`[DEBUG] All ${count} products belong to manufacturer: ${manufacturerName}`);
     }
@@ -255,7 +254,9 @@ export class CableGuyPage extends BasePage {
             if (notificationText.match(/added to your basket|in den warenkorb gelegt/i)) {
                 found = true;
             }
-        } catch {}
+        } catch {
+            // Ignore error: if the first notification popup is not found, try the alternative selector below.
+        }
 
         if (!found) {
             try {
@@ -264,7 +265,9 @@ export class CableGuyPage extends BasePage {
                 if (notificationText.match(/in your basket|im warenkorb/i)) {
                     found = true;
                 }
-            } catch {}
+            } catch {
+                // Intentionally Ignored 
+            }
         }
 
         // Optionally check product name is mentioned

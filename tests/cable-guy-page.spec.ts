@@ -31,11 +31,14 @@ test.describe("Testing the CableGuy, Thomann's cable selection manager", () => {
     console.log(`[DEBUG] Selected cable type (end): ${selectedTypeSecond}`);   
     const selectedCableSecond = await cableGuyPage.selectRandomCableInModal();
     console.log(`[DEBUG] Selected cable (end): ${selectedCableSecond}`);
+    
+    await page.waitForSelector('.cg-plugmodal', { state: 'hidden', timeout: 5000 });
+
 
     
     // Step 3: Manufacturer selection and product count validation
     await cableGuyPage.waitForManufacturerListStable();
-    const { manufacturer, manufacturerName, expectedCount } = await cableGuyPage.selectRandomManufacturer();
+    const { manufacturerName, expectedCount } = await cableGuyPage.selectRandomManufacturer();
     await cableGuyPage.validateProductsBelongToManufacturer(manufacturerName);
     console.log(`[DEBUG] Product count matches: ${expectedCount}`);
 
